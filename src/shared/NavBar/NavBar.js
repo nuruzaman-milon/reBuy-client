@@ -22,9 +22,8 @@ const NavBar = () => {
                     <ul className="menu menu-horizontal p-0">
                         <li><Link to='/'>Home</Link></li>
                         <li><Link to='/blog'>Blog</Link></li>
-                        <li><a>Item 1</a></li>
-                        <li><a>Item 1</a></li>
-                        
+                        <li><Link to='/login'>Login</Link></li>
+                        <li><Link to='/signUp'>SignUp</Link></li>  
                     </ul>
                 </div>
             </div>
