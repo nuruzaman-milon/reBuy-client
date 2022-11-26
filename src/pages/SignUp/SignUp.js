@@ -1,11 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 import { useForm } from "react-hook-form";
+import { AuthContext } from '../../contexts/AuthProvider';
+import toast from 'react-hot-toast';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const SignUp = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const { register, handleSubmit } = useForm();
+    const { createUser, updateUserProfile, providerLogin } = useContext(AuthContext);
+    const googleProvider = new GoogleAuthProvider();
+    const navigate = useNavigate();
+    const onSubmit = data => {
+        console.log(data.phone);
+        createUser(data.email, data.password)
+        .then(result =>{
+            const user = result.user;
+            console.log(user);
+            // form.reset();
+            handleUpdateProfile(data.phone, data.name, data.img)
+        })
+        .catch(error=>console.error(error));
+    };
+
+    const handleUpdateProfile = (phone, name, photoURL ) => {
+        const profile = {
+            phoneNumber : phone,
+            displayName: name,
+            photoURL: photoURL,
+        }
+        updateUserProfile(profile)
+            .then((result) => {
+                navigate('/')
+                toast.success('New User Created Successfully.');
+            })
+            .catch(e => console.error(e))
+    };
+
+    const hangleGoogleLogin = () => {
+        providerLogin(googleProvider)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                // navigate(from, { replace: true });
+            })
+            .catch(error => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // setError(errorMessage);
+            });
+    };
+
     return (
         <div>
             <div className='lg:flex my-6 lg:my-10 items-center w-[92%] mx-auto'>
@@ -34,6 +79,16 @@ const SignUp = () => {
                                     <input required type="password" {...register("password", { required: true })} placeholder="Password"
                                         className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" />
                                 </div>
+                                <div className="mt-4">
+                                    <label name='password' className="block">Phone Number</label>
+                                    <input required type="text" {...register("phone", { required: true })} placeholder="Password"
+                                        className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" />
+                                </div>
+                                <div className="mt-4">
+                                    <label name='password' className="block">Photo Url</label>
+                                    <input required type="text" {...register("img", { required: true })} placeholder="Password"
+                                        className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600" />
+                                </div>
 
                                 <div className="mt-4">
                                     <label name='password' className="block mb-2">Select Type</label>
@@ -43,13 +98,10 @@ const SignUp = () => {
                                     </select>
                                 </div>
 
-
                                 <div className="flex">
                                     <button className="w-full my-4 text-white btn btn-sm btn-primary p-1">Sign Up</button>
                                 </div>
-                                {/* <div >
-                                <label htmlFor="my-modal-3" className="cursor-pointer text-blue-600">forgot password?</label>
-                            </div> */}
+                            
                                 <div className="mt-1 text-grey-dark mb-4">
                                     Don't have an account?
                                     <Link to='/login' className="text-blue-600 hover:underline" href="#">
@@ -59,7 +111,7 @@ const SignUp = () => {
                             </div>
                         </form>
                         <div className="divider">OR</div>
-                        <button className='flex items-center btn btn-outline btn-secondary btn-sm w-full my-2'><FaGoogle /> <p className='ml-2'>Google Signin</p></button>
+                        <button onClick={hangleGoogleLogin} className='flex items-center btn btn-outline btn-secondary btn-sm w-full my-2'><FaGoogle /> <p className='ml-2'>Google Signin</p></button>
 
                     </div>
                 </div>

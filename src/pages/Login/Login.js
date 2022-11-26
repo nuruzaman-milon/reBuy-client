@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 import { useForm } from "react-hook-form";
+import { AuthContext } from '../../contexts/AuthProvider';
+import toast from 'react-hot-toast';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const Login = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const { register, handleSubmit } = useForm();
+    const { signIn, providerLogin } = useContext(AuthContext);
+    const googleProvider = new GoogleAuthProvider();
+
+    const onSubmit = data => {
+        signIn(data.email, data.password)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                toast.success('User Logged In Successfully.');
+                // navigate(from, {replace: true});
+            })
+            .catch(error => {
+                // const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error(errorMessage);
+            })
+    };
+
+    const hangleGoogleLogin = () => {
+        providerLogin(googleProvider)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                // navigate(from, { replace: true });
+            })
+            .catch(error => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // setError(errorMessage);
+            });
+    };
+
     return (
         <div>
             <div className='lg:flex my-6 lg:my-10 items-center w-[92%] mx-auto'>
@@ -36,7 +70,7 @@ const Login = () => {
                                 <label htmlFor="my-modal-3" className="cursor-pointer text-blue-600">forgot password?</label>
                             </div> */}
                                 <div className="mt-1 text-grey-dark mb-4">
-                                    Don't have an account? 
+                                    Don't have an account?
                                     <Link to='/signUp' className="text-blue-600 hover:underline" href="#">
                                         SignUp
                                     </Link>
@@ -44,8 +78,7 @@ const Login = () => {
                             </div>
                         </form>
                         <div className="divider">OR</div>
-                        <button className='flex items-center btn btn-outline btn-secondary btn-sm w-full my-2'><FaGoogle /> <p className='ml-2'>Google Signin</p></button>
-                        
+                        <button onClick={hangleGoogleLogin} className='flex items-center btn btn-outline btn-secondary btn-sm w-full my-2'><FaGoogle /> <p className='ml-2'>Google Signin</p></button>
                     </div>
                 </div>
             </div>
