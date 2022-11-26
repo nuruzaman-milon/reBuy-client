@@ -12,12 +12,11 @@ const SignUp = () => {
     const googleProvider = new GoogleAuthProvider();
     const navigate = useNavigate();
     const onSubmit = data => {
-        console.log(data.phone);
+        // console.log(data);
+        saveUserToDb(data.name, data.email, data.phone, data.img, data.role);
         createUser(data.email, data.password)
         .then(result =>{
             const user = result.user;
-            console.log(user);
-            // form.reset();
             handleUpdateProfile(data.phone, data.name, data.img)
         })
         .catch(error=>console.error(error));
@@ -36,6 +35,27 @@ const SignUp = () => {
             })
             .catch(e => console.error(e))
     };
+
+    const saveUserToDb = (name, email, phone, img, role) =>{
+        const user = {
+            name,
+            email,
+            phone,
+            img,
+            role
+        }
+        fetch('http://localhost:5000/users',{
+            method:'POST',
+            headers:{
+                'content-type':'application/json'
+            },
+            body:JSON.stringify(user)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+        })
+    }
 
     const hangleGoogleLogin = () => {
         providerLogin(googleProvider)
