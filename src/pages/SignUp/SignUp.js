@@ -37,7 +37,7 @@ const SignUp = () => {
 
                                 <div className="mt-4">
                                     <label name='password' className="block mb-2">Select Type</label>
-                                    <select {...register("type")} className="select select-bordered w-full">
+                                    <select {...register("role")} className="select select-bordered w-full">
                                         <option value="buyer" selected>Buyer</option>
                                         <option value="seller">Seller</option>
                                     </select>
