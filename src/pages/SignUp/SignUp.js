@@ -1,30 +1,40 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 import { useForm } from "react-hook-form";
 import { AuthContext } from '../../contexts/AuthProvider';
 import toast from 'react-hot-toast';
 import { GoogleAuthProvider } from 'firebase/auth';
+import { useQuery } from '@tanstack/react-query';
+
+
 
 const SignUp = () => {
+    // const [data, setData] = useState({})
     const { register, handleSubmit } = useForm();
     const { createUser, updateUserProfile, providerLogin } = useContext(AuthContext);
     const googleProvider = new GoogleAuthProvider();
+    // const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+
+    // fetch(`http://localhost:5000/users?email=${user?.email}`)
+    //     .then(res => res.json())
+    //     .then(userData => setData(userData))
+
     const onSubmit = data => {
         // console.log(data);
         saveUserToDb(data.name, data.email, data.phone, data.img, data.role);
         createUser(data.email, data.password)
-        .then(result =>{
-            const user = result.user;
-            handleUpdateProfile(data.phone, data.name, data.img)
-        })
-        .catch(error=>console.error(error));
+            .then(result => {
+                const user = result.user;
+                handleUpdateProfile(data.phone, data.name, data.img)
+            })
+            .catch(error => console.error(error));
     };
 
-    const handleUpdateProfile = (phone, name, photoURL ) => {
+    const handleUpdateProfile = (phone, name, photoURL) => {
         const profile = {
-            phoneNumber : phone,
+            phoneNumber: phone,
             displayName: name,
             photoURL: photoURL,
         }
@@ -36,33 +46,15 @@ const SignUp = () => {
             .catch(e => console.error(e))
     };
 
-    const saveUserToDb = (name, email, phone, img, role) =>{
-        const user = {
-            name,
-            email,
-            phone,
-            img,
-            role
-        }
-        fetch('http://localhost:5000/users',{
-            method:'POST',
-            headers:{
-                'content-type':'application/json'
-            },
-            body:JSON.stringify(user)
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            console.log(data);
-        })
-    }
 
     const hangleGoogleLogin = () => {
         providerLogin(googleProvider)
             .then(result => {
                 const user = result.user;
-                console.log(user);
-                // navigate(from, { replace: true });
+                // console.log(user);
+                // if (!data) {
+                    saveUserToDb(user?.displayName, user?.email, user?.phone, user?.photoURL, 'buyer')
+                // }
             })
             .catch(error => {
                 const errorCode = error.code;
@@ -70,6 +62,39 @@ const SignUp = () => {
                 // setError(errorMessage);
             });
     };
+
+
+
+    // const uri = `http://localhost:5000/bookings?email=${user?.email}`;
+    // const { isLoading, data: users } = useQuery({
+    //     queryKey: ['bookings', user?.email],
+    //     queryFn: () =>
+    //         fetch(uri).then(res =>
+    //             res.json()
+    //         )
+    // })
+    // if (isLoading) return 'Loading...';
+
+    const saveUserToDb = (name, email, phone, img, role) => {
+        const user = {
+            name,
+            email,
+            phone,
+            img,
+            role
+        }
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+    }
 
     return (
         <div>
@@ -121,7 +146,7 @@ const SignUp = () => {
                                 <div className="flex">
                                     <button className="w-full my-4 text-white btn btn-sm btn-primary p-1">Sign Up</button>
                                 </div>
-                            
+
                                 <div className="mt-1 text-grey-dark mb-4">
                                     Don't have an account?
                                     <Link to='/login' className="text-blue-600 hover:underline" href="#">

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 import { useForm } from "react-hook-form";
@@ -7,9 +7,15 @@ import toast from 'react-hot-toast';
 import { GoogleAuthProvider } from 'firebase/auth';
 
 const Login = () => {
+    // const [data, setData] = useState({})
+    // const { user } = useContext(AuthContext);
     const { register, handleSubmit } = useForm();
     const { signIn, providerLogin } = useContext(AuthContext);
     const googleProvider = new GoogleAuthProvider();
+
+    // fetch(`http://localhost:5000/users?email=${user?.email}`)
+    //     .then(res => res.json())
+    //     .then(userData => setData(userData))
 
     const onSubmit = data => {
         signIn(data.email, data.password)
@@ -30,7 +36,8 @@ const Login = () => {
         providerLogin(googleProvider)
             .then(result => {
                 const user = result.user;
-                console.log(user);
+                // console.log(user);
+                    saveUserToDb(user?.displayName, user?.email, user?.phone, user?.photoURL, 'buyer')
                 // navigate(from, { replace: true });
             })
             .catch(error => {
@@ -39,6 +46,27 @@ const Login = () => {
                 // setError(errorMessage);
             });
     };
+
+    const saveUserToDb = (name, email, phone, img, role) => {
+        const user = {
+            name,
+            email,
+            phone,
+            img,
+            role
+        }
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+    }
 
     return (
         <div>

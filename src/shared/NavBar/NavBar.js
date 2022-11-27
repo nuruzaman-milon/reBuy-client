@@ -5,11 +5,11 @@ import { AuthContext } from '../../contexts/AuthProvider';
 const NavBar = () => {
     const { user, logout } = useContext(AuthContext);
 
-    const handleLogout = () =>{
+    const handleLogout = () => {
         logout()
-        .then(()=>{})
-        .catch(e=>console.error(e))
-      }
+            .then(() => { })
+            .catch(e => console.error(e))
+    }
 
     return (
         <div className=' bg-primary text-white'>
@@ -20,21 +20,23 @@ const NavBar = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                         </label>
 
-                        <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-primary rounded-box w-52">
-                        <li><Link to='/'>Home</Link></li>
-                        <li><Link to='/blog'>Blog</Link></li>
-                        {
-                            !user ? <>
-                                <li><Link to='/login'>Login</Link></li>
-                                <li><Link to='/signUp'>SignUp</Link></li>
-                            </>
-                                : <>
-                                    <li><Link to='/dashboard'>Dashboard</Link></li>
-                                    <li onClick={handleLogout}><Link to='/'>LogOut</Link></li>
-                                </>
-                        }
+                        {/* <label htmlFor="sidebar-drawer" className="btn btn-primary drawer-button lg:hidden">Open drawer</label> */}
 
-                    </ul>
+                        <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-primary rounded-box w-52">
+                            <li><Link to='/'>Home</Link></li>
+                            <li><Link to='/blog'>Blog</Link></li>
+                            {
+                                !user ? <>
+                                    <li><Link to='/login'>Login</Link></li>
+                                    <li><Link to='/signUp'>SignUp</Link></li>
+                                </>
+                                    : <>
+                                        <li><Link to='/dashboard'>Dashboard</Link></li>
+                                        <li onClick={handleLogout}><Link to='/'>LogOut</Link></li>
+                                    </>
+                            }
+
+                        </ul>
                     </div>
 
                     <Link to='/' className="btn btn-ghost normal-case text-xl"><img className='w-8 mr-1' src="favicon.png" alt="" />ReBuy</Link>
@@ -60,6 +62,13 @@ const NavBar = () => {
                         }
 
                     </ul>
+
+                </div>
+                    
+                <div className='navbar-end lg:hidden'>
+                    <label htmlFor="sidebar-drawer" tabIndex={1} className="btn btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                    </label>
                 </div>
             </div>
         </div>
