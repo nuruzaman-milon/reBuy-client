@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 import { useForm } from "react-hook-form";
 import { AuthContext } from '../../contexts/AuthProvider';
@@ -12,6 +12,10 @@ const Login = () => {
     const { register, handleSubmit } = useForm();
     const { signIn, providerLogin } = useContext(AuthContext);
     const googleProvider = new GoogleAuthProvider();
+    const navigate = useNavigate();
+    const location = useLocation(); 
+
+    const from = location.state?.from?.pathname || '/';
 
     // fetch(`http://localhost:5000/users?email=${user?.email}`)
     //     .then(res => res.json())
@@ -22,8 +26,9 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 getUserToken(user.email);
-                console.log(user);
+                // console.log(user);
                 toast.success('User Logged In Successfully.');
+                navigate(from, { replace: true });
                 // navigate(from, {replace: true});
             })
             .catch(error => {
@@ -66,7 +71,8 @@ const Login = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
+                navigate(from, { replace: true });
             })
     };
 

@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
 
     //update user info to firebase
     const updateUserProfile = (profile) => {
-        // setLoading(true);
+        setLoading(true);
         return updateProfile(auth.currentUser, profile);
     }
 
@@ -40,13 +40,13 @@ const AuthProvider = ({ children }) => {
 
     //logout
     const logout = () =>{
-        // setLoading(true);
+        setLoading(true);
         return signOut(auth);
     }
 
     //manual login user
     const signIn = (email, password) =>{
-        // setLoading(true);
+        setLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     }
 
