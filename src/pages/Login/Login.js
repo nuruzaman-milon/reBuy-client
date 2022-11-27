@@ -21,6 +21,7 @@ const Login = () => {
         signIn(data.email, data.password)
             .then(result => {
                 const user = result.user;
+                getUserToken(user.email);
                 console.log(user);
                 toast.success('User Logged In Successfully.');
                 // navigate(from, {replace: true});
@@ -36,6 +37,7 @@ const Login = () => {
         providerLogin(googleProvider)
             .then(result => {
                 const user = result.user;
+                getUserToken(user.email);
                 // console.log(user);
                     saveUserToDb(user?.displayName, user?.email, user?.phone, user?.photoURL, 'buyer')
                 // navigate(from, { replace: true });
@@ -66,6 +68,16 @@ const Login = () => {
             .then(data => {
                 console.log(data);
             })
+    };
+
+    const getUserToken = email =>{
+        fetch(`http://localhost:5000/jwt?email=${email}`)
+        .then(res=>res.json())
+        .then(data=>{
+            if (data.accessToken) {
+                localStorage.setItem('accessToken', data.accessToken);
+            }
+        })
     }
 
     return (

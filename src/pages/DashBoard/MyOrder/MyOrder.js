@@ -8,14 +8,19 @@ const MyOrder = () => {
 
     const { isLoading, error, data: bookings } = useQuery({
         queryKey: ['bookings', user?.email],
-        queryFn: () =>
-            fetch(uri).then(res =>
-                res.json()
-            )
+        queryFn: async () =>
+            {
+                const res = await fetch(uri, {
+                    headers:{
+                        authorization:`bearer ${localStorage.getItem('accessToken')}`
+                    }
+                });
+                const data = await res.json();
+                return data;
+            } 
     })
 
     if (isLoading) return 'Loading...';
-
     if (error) return 'An error has occurred: ' + error.message;
 
     return (
@@ -74,8 +79,6 @@ const MyOrder = () => {
                 :
                 <h1 className='ml-40 mt-6 text-2xl font-bold'>You have no booking! Please add a booking! </h1>
             }
-
-
         </div>
     );
 };

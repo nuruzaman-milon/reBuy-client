@@ -6,6 +6,7 @@ import { AuthContext } from '../../contexts/AuthProvider';
 import toast from 'react-hot-toast';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { useQuery } from '@tanstack/react-query';
+import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
 
 
@@ -28,6 +29,7 @@ const SignUp = () => {
             .then(result => {
                 const user = result.user;
                 handleUpdateProfile(data.phone, data.name, data.img)
+                getUserToken(user.email)
             })
             .catch(error => console.error(error));
     };
@@ -51,6 +53,7 @@ const SignUp = () => {
         providerLogin(googleProvider)
             .then(result => {
                 const user = result.user;
+                getUserToken(user.email)
                 // console.log(user);
                 // if (!data) {
                     saveUserToDb(user?.displayName, user?.email, user?.phone, user?.photoURL, 'buyer')
@@ -62,18 +65,6 @@ const SignUp = () => {
                 // setError(errorMessage);
             });
     };
-
-
-
-    // const uri = `http://localhost:5000/bookings?email=${user?.email}`;
-    // const { isLoading, data: users } = useQuery({
-    //     queryKey: ['bookings', user?.email],
-    //     queryFn: () =>
-    //         fetch(uri).then(res =>
-    //             res.json()
-    //         )
-    // })
-    // if (isLoading) return 'Loading...';
 
     const saveUserToDb = (name, email, phone, img, role) => {
         const user = {
@@ -94,6 +85,17 @@ const SignUp = () => {
             .then(data => {
                 console.log(data);
             })
+    };
+
+    const getUserToken = email =>{
+        fetch(`http://localhost:5000/jwt?email=${email}`)
+        .then(res=>res.json())
+        .then(data=>{
+            if (data.accessToken) {
+                localStorage.setItem('accessToken', data.accessToken);
+            }
+            navigate('/')
+        })
     }
 
     return (
