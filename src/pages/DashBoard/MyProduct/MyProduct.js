@@ -6,7 +6,7 @@ import { AuthContext } from '../../../contexts/AuthProvider';
 const MyProduct = () => {
     // const [disabled, setDisabled] = useState(false)
     const { user } = useContext(AuthContext);
-    const uri = `http://localhost:5000/products?email=${user?.email}`;
+    const uri = `https://resale-server-blond.vercel.app/products?email=${user?.email}`;
 
     const { isLoading, error, data: products } = useQuery({
         queryKey: ['products', user?.email],
@@ -28,7 +28,7 @@ const MyProduct = () => {
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure you want to delete?');
         if (proceed) {
-            fetch(`http://localhost:5000/products/${id}`,{
+            fetch(`https://resale-server-blond.vercel.app/products/${id}`,{
                 method:'DELETE'
             })
             .then(res=>res.json())
@@ -45,7 +45,7 @@ const MyProduct = () => {
 
         const proceed = window.confirm('Are you sure you want to advertise?');
         if (proceed) {
-            fetch('http://localhost:5000/advertises', {
+            fetch('https://resale-server-blond.vercel.app/advertises', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

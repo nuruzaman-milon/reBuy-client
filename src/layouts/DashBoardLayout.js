@@ -19,7 +19,7 @@ const DashBoardLayout = () => {
     // const { isLoading, error, data:roleUser } = useQuery({
     //     queryKey: ['users',user.email],
     //     queryFn: () =>
-    //       fetch(`http://localhost:5000/users?email=${user.email}`).then(res =>
+    //       fetch(`https://resale-server-blond.vercel.app/users?email=${user.email}`).then(res =>
     //         res.json()
     //       )
     //   })

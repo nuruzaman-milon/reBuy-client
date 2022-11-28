@@ -18,7 +18,7 @@ const SignUp = () => {
     // const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    // fetch(`http://localhost:5000/users?email=${user?.email}`)
+    // fetch(`https://resale-server-blond.vercel.app/users?email=${user?.email}`)
     //     .then(res => res.json())
     //     .then(userData => setData(userData))
 
@@ -74,7 +74,7 @@ const SignUp = () => {
             img,
             role
         }
-        fetch('http://localhost:5000/users', {
+        fetch('https://resale-server-blond.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -88,7 +88,7 @@ const SignUp = () => {
     };
 
     const getUserToken = email =>{
-        fetch(`http://localhost:5000/jwt?email=${email}`)
+        fetch(`https://resale-server-blond.vercel.app/jwt?email=${email}`)
         .then(res=>res.json())
         .then(data=>{
             if (data.accessToken) {

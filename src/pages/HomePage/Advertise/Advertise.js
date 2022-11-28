@@ -5,7 +5,7 @@ const Advertise = () => {
     const { isLoading, error, data: advertises } = useQuery({
         queryKey: ['advertises'],
         queryFn: () =>
-            fetch('http://localhost:5000/advertises').then(res =>
+            fetch('https://resale-server-blond.vercel.app/advertises').then(res =>
                 res.json()
             )
     })

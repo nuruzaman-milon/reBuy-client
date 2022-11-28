@@ -10,7 +10,7 @@ const AddProduct = () => {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => {
-        fetch('http://localhost:5000/products', {
+        fetch('https://resale-server-blond.vercel.app/products', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -29,7 +29,7 @@ const AddProduct = () => {
     const { isLoading, error, data: categories } = useQuery({
         queryKey: ['category'],
         queryFn: () =>
-            fetch('http://localhost:5000/category').then(res =>
+            fetch('https://resale-server-blond.vercel.app/category').then(res =>
                 res.json()
             )
     })

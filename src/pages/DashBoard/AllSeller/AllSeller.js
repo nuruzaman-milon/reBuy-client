@@ -6,7 +6,7 @@ const AllSeller = () => {
     const { isLoading, error, data: users, refetch} = useQuery({
         queryKey: ['users', 'seller'],
         queryFn: () =>
-            fetch('http://localhost:5000/users/seller').then(res =>
+            fetch('https://resale-server-blond.vercel.app/users/seller').then(res =>
                 res.json()
             )
     })
@@ -18,7 +18,7 @@ const AllSeller = () => {
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure you want to delete?');
         if (proceed) {
-            fetch(`http://localhost:5000/users/${id}`,{
+            fetch(`https://resale-server-blond.vercel.app/users/${id}`,{
                 method:'DELETE'
             })
             .then(res=>res.json())

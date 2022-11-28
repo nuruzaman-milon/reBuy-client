@@ -28,7 +28,7 @@ const InfoSection = () => {
         },
     ]
     return (
-        <div>
+        <div className='mb-20'>
             <h1 className='text-center text-3xl font-extrabold my-9'>Start Reselling with ReBuy in Four Simple Steps</h1>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-[92%] mx-auto'>
                 {
