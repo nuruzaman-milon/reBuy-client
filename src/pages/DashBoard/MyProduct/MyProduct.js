@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import { AuthContext } from '../../../contexts/AuthProvider';
 
 const MyProduct = () => {
+    // const [disabled, setDisabled] = useState(false)
     const { user } = useContext(AuthContext);
     const uri = `http://localhost:5000/products?email=${user?.email}`;
 
@@ -22,6 +24,45 @@ const MyProduct = () => {
 
     if (isLoading) return 'Loading...';
     if (error) return 'An error has occurred: ' + error.message;
+
+    const handleDelete = id => {
+        const proceed = window.confirm('Are you sure you want to delete?');
+        if (proceed) {
+            fetch(`http://localhost:5000/products/${id}`,{
+                method:'DELETE'
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                console.log(data)
+                if (data.deletedCount === 1) {
+                    toast.success('product deleted successfully')
+                }
+            })
+        }
+    }
+
+    const handleAdvertise = advertise => {
+
+        const proceed = window.confirm('Are you sure you want to advertise?');
+        if (proceed) {
+            fetch('http://localhost:5000/advertises', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(advertise)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.acknowledged) {
+                    // setDisabled(true);
+                    toast.success('advertise added successfully');
+                }
+            })
+        }
+    };
+
 
     return (
         <div>
@@ -64,8 +105,8 @@ const MyProduct = () => {
                                     <td>{product?.phoneNumber}</td>
                                     <td>{product?.location}</td>
                                     <td>unsold</td>
-                                    <td><button className='btn btn-primary btn-sm'>Advertise</button></td>
-                                    <td><button className='btn btn-primary btn-sm'>Delete</button> </td>
+                                    <td><button onClick={()=>handleAdvertise(product)} className='btn btn-primary btn-sm'>Advertise</button></td>
+                                    <td><button onClick={()=>handleDelete(product?._id)} className='btn btn-primary btn-sm'>Delete</button> </td>
                                 </tr>)
                             }
 

@@ -10,6 +10,7 @@ import MyOrder from "../../pages/DashBoard/MyOrder/MyOrder";
 import MyProduct from "../../pages/DashBoard/MyProduct/MyProduct";
 import Home from "../../pages/HomePage/Home";
 import Login from "../../pages/Login/Login";
+import NotFound from "../../pages/NotFound";
 import Products from "../../pages/Products/Products";
 import SignUp from "../../pages/SignUp/SignUp";
 import AdminRoute from "./AdminRoute";
@@ -75,5 +76,9 @@ export const router = createBrowserRouter([
                 element:<AdminRoute><AllBuyer></AllBuyer></AdminRoute>
             }
         ]
+    },
+    {
+        path:'*',
+        element:<NotFound></NotFound>
     }
 ])
