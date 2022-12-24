@@ -22,8 +22,8 @@ const Advertise = () => {
             }
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {
-                advertises.map(advertise => <div className="card shadow-xl">
-                    <figure><img src={advertise.img} alt="Shoes" /></figure>
+                advertises.map(advertise => <div className="card shadow-xl hover:bg-cyan-100">
+                    <figure className='w-[100%]'><img className='w-[90%] h-72' src={advertise.img} alt="Shoes" /></figure>
                     <div className="card-body">
                         <h2 className="card-title">
                             {advertise?.name}
